@@ -1,0 +1,286 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>游戏介绍 - 贪吃蛇</title>
+    <style>
+        /* 原有样式保持不变 */
+        body {
+            margin: 0;
+            padding: 20px;
+            background-color: #e6f3ff;
+            background-image: 
+                radial-gradient(circle at 50% 50%, rgba(255, 255, 255, 0.8) 0%, transparent 10%),
+                radial-gradient(circle at 25% 25%, rgba(255, 255, 255, 0.8) 0%, transparent 8%),
+                radial-gradient(circle at 75% 75%, rgba(255, 255, 255, 0.8) 0%, transparent 8%),
+                linear-gradient(45deg, #e6f3ff 25%, #f0f7ff 25%, #f0f7ff 50%, #e6f3ff 50%, #e6f3ff 75%, #f0f7ff 75%, #f0f7ff);
+            background-size: 
+                100px 100px,
+                80px 80px,
+                80px 80px,
+                40px 40px;
+            font-family: Arial, sans-serif;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .content-wrapper {
+            flex: 1;
+            padding: 20px;
+        }
+
+        .game-info-container {
+            background-color: rgba(255, 255, 255, 0.7);
+            padding: 30px;
+            border-radius: 15px;
+            box-shadow: 0 0 20px rgba(255, 255, 255, 0.5);
+            margin: 150px auto;
+            max-width: 1000px;
+            width: 90%;
+            display: flex;
+            gap: 30px;
+        }
+
+        .game-image-section {
+            flex: 0 0 400px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .game-image {
+            width: 100%;
+            height: auto;
+            border-radius: 10px;
+            margin-bottom: 20px;
+        }
+
+        .game-info-section {
+            flex: 1;
+        }
+
+        h1 {
+            color: #333;
+            margin-bottom: 20px;
+            font-size: 28px;
+        }
+
+        .game-description {
+            color: #666;
+            line-height: 1.6;
+            margin-bottom: 20px;
+        }
+
+        .game-details {
+            margin-top: 20px;
+        }
+
+        .detail-item {
+            margin-bottom: 15px;
+        }
+
+        .detail-label {
+            font-weight: bold;
+            color: #333;
+        }
+
+        .play-button {
+            display: block;
+            width: 200px;
+            margin: -70px auto 30px;
+            padding: 12px 30px;
+            background-color: rgba(74, 144, 226, 0.7);
+            color: white;
+            text-decoration: none;
+            border-radius: 25px;
+            transition: all 0.3s ease;
+            text-align: center;
+        }
+
+        .play-button:hover {
+            background-color: rgba(74, 144, 226, 0.9);
+            transform: scale(1.05);
+        }
+
+        .back-button {
+            position: fixed;
+            top: 60px;
+            left: 70px;
+            padding: 10px 20px;
+            background-color: rgba(0, 0, 0, 0.1);
+            color: #333;
+            text-decoration: none;
+            border-radius: 20px;
+            transition: all 0.3s ease;
+        }
+
+        .back-button:hover {
+            background-color: rgba(0, 0, 0, 0.2);
+        }
+
+        footer {
+            text-align: center;
+            padding: 20px;
+            background: linear-gradient(45deg, #e6f3ff 25%, #f0f7ff 25%, #f0f7ff 50%, #e6f3ff 50%, #e6f3ff 75%, #f0f7ff 75%, #f0f7ff);
+            background-size: 40px 40px;
+            margin-top: auto;
+        }
+
+        .footer-content {
+            background-color: rgba(255, 255, 255, 0.3);
+            padding: 20px;
+            border-radius: 10px;
+            max-width: 600px;
+            margin: 0 auto;
+            box-shadow: 0 0 10px rgba(255, 255, 255, 0.5);
+        }
+
+        @media (max-width: 900px) {
+            .game-info-container {
+                flex-direction: column;
+            }
+
+            .game-image-section {
+                flex: 0 0 auto;
+                max-width: 100%;
+            }
+        }
+
+        /* 添加音乐控制按钮样式 */
+        .music-control {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            width: 32px;
+            height: 32px;
+            background-color: rgba(255, 255, 255, 0.8);
+            border-radius: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            z-index: 1000;
+        }
+
+        .music-control:hover {
+            transform: scale(1.1);
+            background-color: rgba(255, 255, 255, 0.9);
+        }
+
+        .music-control img {
+            width: 20px;
+            height: 20px;
+        }
+
+        @media screen and (max-width: 768px) {
+            .music-control {
+                width: 32px;
+                height: 32px;
+                top: 15px;
+                right: 15px;
+            }
+
+            .music-control img {
+                width: 18px;
+                height: 18px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- 添加音乐控制按钮 -->
+    <div class="music-control" onclick="toggleMusic()">
+        <img src="/static/pages/images/开声音.png" alt="音乐控制" id="musicIcon">
+    </div>
+
+    <!-- 添加音频元素 -->
+    <audio id="bgMusic" loop>
+        <source src="/static/pages/music/background.mp3" type="audio/mpeg">
+    </audio>
+
+    <div class="content-wrapper">
+        <a href="/second-page" class="back-button">返回游戏列表</a>
+        <div class="game-info-container">
+            <div class="game-image-section">
+                <img src="/static/pages/images/贪吃蛇.jpg" alt="游戏图片" class="game-image">
+            </div>
+            
+            <div class="game-info-section">
+                <h1>贪吃蛇</h1>
+                <div class="game-description">
+                    永恒的经典游戏，玩家控制一条不断成长的蛇，通过吃食物来增加长度。需要避免撞到墙壁和自己的身体，随着蛇的长度增加，游戏难度也随之提升。
+                </div>
+                
+                <div class="game-details">
+                    <div class="detail-item">
+                        <span class="detail-label">操作方式：</span>
+                        <p>↑↓←→ 方向键控制移动方向</p>
+                    </div>
+                    <div class="detail-item">
+                        <span class="detail-label">难度：</span>
+                        <p>简单 → 困难（随长度增加）</p>
+                    </div>
+                    <div class="detail-item">
+                        <span class="detail-label">特色：</span>
+                        <p>经典玩法、计分系统、速度变化、无限关卡</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <a href="/static/pages/贪吃蛇/docs/index.html" class="play-button" target="_blank">开始游戏</a>
+    </div>
+
+    <footer>
+        <div class="footer-content">
+            <p style="color: #333; font-size: 14px; margin: 10px 0;">© 2023 在线游戏合集. 保留所有权利。</p>
+            <p style="color: #666; font-size: 12px; margin: 10px 0;">本网站仅供娱乐，不涉及任何商业用途。</p>
+        </div>
+    </footer>
+
+    <!-- 添加音乐控制脚本 -->
+    <script>
+        const music = document.getElementById('bgMusic');
+        const musicIcon = document.getElementById('musicIcon');
+        let isMusicPlaying = false;
+
+        function toggleMusic() {
+            if (isMusicPlaying) {
+                music.pause();
+                musicIcon.src = '/static/pages/images/关.png';
+                localStorage.setItem('musicPlaying', 'false');
+            } else {
+                music.volume = 0.5;
+                music.play().then(() => {
+                    musicIcon.src = '/static/pages/images/开声音.png';
+                    localStorage.setItem('musicPlaying', 'true');
+                }).catch(error => {
+                    console.log("播放失败:", error);
+                });
+            }
+            isMusicPlaying = !isMusicPlaying;
+        }
+        
+        document.addEventListener('DOMContentLoaded', () => {
+            const wasPlaying = localStorage.getItem('musicPlaying') === 'true';
+            const lastTime = parseFloat(localStorage.getItem('musicTime') || '0');
+            
+            if (wasPlaying) {
+                music.currentTime = lastTime;
+                music.volume = 0.5;
+                music.play().then(() => {
+                    isMusicPlaying = true;
+                    musicIcon.src = '/static/pages/images/开声音.png';
+                    setInterval(() => {
+                        localStorage.setItem('musicTime', music.currentTime);
+                    }, 1000);
+                });
+            } else {
+                musicIcon.src = '/static/pages/images/关.png';
+                isMusicPlaying = false;
+            }
+        });
+    </script>
+</body>
+</html> 

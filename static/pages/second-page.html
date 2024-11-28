@@ -1,0 +1,336 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>GAME START</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            background-color: #e6f3ff;
+            background-image: 
+                radial-gradient(circle at 50% 50%, rgba(255, 255, 255, 0.8) 0%, transparent 10%),
+                radial-gradient(circle at 25% 25%, rgba(255, 255, 255, 0.8) 0%, transparent 8%),
+                radial-gradient(circle at 75% 75%, rgba(255, 255, 255, 0.8) 0%, transparent 8%),
+                linear-gradient(45deg, #e6f3ff 25%, #f0f7ff 25%, #f0f7ff 50%, #e6f3ff 50%, #e6f3ff 75%, #f0f7ff 75%, #f0f7ff);
+            background-size: 
+                100px 100px,
+                80px 80px,
+                80px 80px,
+                40px 40px;
+            font-family: Arial, sans-serif;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+
+        /* 头部样式 */
+        .header {
+            text-align: center;
+            padding: 45px 0;
+            margin-top: 50px;
+        }
+
+        .header h1 {
+            margin: 0;
+            color: #333;
+            font-size: 60px;
+            transition: all 0.3s ease;
+            cursor: pointer;
+            display: inline-block;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.1);
+            animation: titleGlow 2s ease-in-out infinite;
+        }
+
+        @keyframes titleGlow {
+            0% {
+                color: #333;
+                text-shadow: 2px 2px 4px rgba(0,0,0,0.1);
+            }
+            50% {
+                color: #4a90e2;
+                text-shadow: 0 0 10px rgba(74, 144, 226, 0.5),
+                            0 0 20px rgba(74, 144, 226, 0.3);
+            }
+            100% {
+                color: #333;
+                text-shadow: 2px 2px 4px rgba(0,0,0,0.1);
+            }
+        }
+
+        .header h1:hover {
+            transform: scale(1.05);
+            animation-play-state: paused;
+        }
+
+        /* 游戏展示区域样式 */
+        .games-container {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 80px;
+            padding: 20px 50px;
+            max-width: 1200px;
+            margin: 0 auto;
+            justify-items: center;
+            margin-top: 0px;
+            flex: 1;
+        }
+
+        .game-item {
+            text-align: center;
+            text-decoration: none;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.3s ease;
+        }
+
+        .game-image {
+            width: 200px;
+            height: 200px;
+            object-fit: contain;
+            border-radius: 10px;
+            transition: transform 0.3s ease;
+            margin: 0 auto;
+        }
+
+        .game-name {
+            color: #333;
+            font-size: 20px;
+            margin-top: 15px;
+            text-decoration: none;
+            transition: all 0.3s ease;
+        }
+
+        .game-item:hover .game-image {
+            transform: scale(1.05);
+        }
+
+        .game-item:hover .game-name {
+            color: #4a90e2;
+            transform: scale(1.05);
+            font-weight: bold;
+        }
+
+        /* 响应式设计 */
+        @media (max-width: 1200px) {
+            .games-container {
+                grid-template-columns: repeat(2, 1fr);
+                gap: 50px;
+            }
+            .game-image {
+                width: 180px;
+                height: 180px;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .games-container {
+                grid-template-columns: repeat(2, 1fr);
+                padding: 20px;
+                gap: 40px;
+            }
+            .game-image {
+                width: 150px;
+                height: 150px;
+            }
+        }
+
+        .music-control {
+            position: fixed;
+            top: 60px;
+            right: 60px;
+            width: 40px;
+            height: 40px;
+            background-color: rgba(255, 255, 255, 0.8);
+            border-radius: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            z-index: 1000;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+
+        .music-control:hover {
+            transform: scale(1.1);
+            background-color: rgba(255, 255, 255, 0.9);
+        }
+
+        .music-control img {
+            width: 24px;
+            height: 24px;
+        }
+
+        /* 修改首页返回按钮样式 */
+        .home-button {
+            position: fixed;
+            top: 60px;
+            left: 80px;
+            padding: 10px 20px;
+            background-color: rgba(0, 0, 0, 0.1);
+            color: #333;
+            text-decoration: none;
+            border-radius: 20px;
+            transition: all 0.3s ease;
+            z-index: 1000;
+        }
+
+        .home-button:hover {
+            background-color: rgba(0, 0, 0, 0.2);
+        }
+
+        /* 修改页脚样式 */
+        footer {
+            text-align: center; 
+            padding: 20px; 
+            margin-top: auto;
+            background: linear-gradient(45deg, #e6f3ff 25%, #f0f7ff 25%, #f0f7ff 50%, #e6f3ff 50%, #e6f3ff 75%, #f0f7ff 75%, #f0f7ff);
+            background-size: 40px 40px;
+            position: relative;
+            width: 100%;
+            box-sizing: border-box;
+        }
+
+        /* 添加登出按钮样式 */
+        .logout-button {
+            position: fixed;
+            top: 60px;
+            right: 110px;
+            padding: 10px 20px;
+            background-color: rgba(255, 0, 0, 0.1);
+            color: #333;
+            text-decoration: none;
+            border-radius: 20px;
+            transition: all 0.3s ease;
+            z-index: 1000;
+        }
+
+        .logout-button:hover {
+            background-color: rgba(255, 0, 0, 0.2);
+        }
+    </style>
+</head>
+<body>
+    <!-- 添加登出按钮 -->
+    <a href="/logout" class="logout-button">登出</a>
+
+    <div class="header">
+        <h1>GAME START</h1>
+    </div>
+
+    <div class="games-container">
+        <a href="/game-info" class="game-item">
+            <img src="/static/pages/images/俄罗斯方块.png" alt="俄罗斯方块" class="game-image">
+            <div class="game-name">俄罗斯方块</div>
+        </a>
+
+        <a href="/pacman-info" class="game-item">
+            <img src="/static/pages/images/吃豆人.png" alt="吃豆人" class="game-image">
+            <div class="game-name">吃豆人</div>
+        </a>
+
+        <a href="/mario-info" class="game-item">
+            <img src="/static/pages/images/马里奥.jpg" alt="马里奥" class="game-image">
+            <div class="game-name">马里奥</div>
+        </a>
+
+        <a href="/snake-info" class="game-item">
+            <img src="/static/pages/images/贪吃蛇.jpg" alt="贪吃蛇" class="game-image">
+            <div class="game-name">贪吃蛇</div>
+        </a>
+
+        <a href="/gomoku-info" class="game-item">
+            <img src="/static/pages/images/五子棋.png" alt="五子棋" class="game-image">
+            <div class="game-name">五子棋</div>
+        </a>
+
+        <a href="/2048-info" class="game-item">
+            <img src="/static/pages/images/2048.png" alt="2048" class="game-image">
+            <div class="game-name">2048</div>
+        </a>
+
+        <a href="/space-war-info" class="game-item">
+            <img src="/static/pages/images/星战.png" alt="星际战争" class="game-image">
+            <div class="game-name">星际战争</div>
+        </a>
+    </div>
+
+    <div class="music-control" onclick="toggleMusic()">
+        <img src="/static/pages/images/开声音.png" alt="音乐控制" id="musicIcon">
+    </div>
+
+    <audio id="bgMusic" loop>
+        <source src="/static/pages/music/background.mp3" type="audio/mpeg">
+    </audio>
+
+    <script>
+        const music = document.getElementById('bgMusic');
+        const musicIcon = document.getElementById('musicIcon');
+        let isMusicPlaying = false;
+
+        function toggleMusic() {
+            if (isMusicPlaying) {
+                music.pause();
+                musicIcon.src = '/static/pages/images/关.png';
+                localStorage.setItem('musicPlaying', 'false');
+            } else {
+                music.volume = 0.5;
+                music.play().then(() => {
+                    musicIcon.src = '/static/pages/images/开声音.png';
+                    localStorage.setItem('musicPlaying', 'true');
+                }).catch(error => {
+                    console.log("播放失败:", error);
+                });
+            }
+            isMusicPlaying = !isMusicPlaying;
+        }
+        
+        document.addEventListener('DOMContentLoaded', () => {
+            const wasPlaying = localStorage.getItem('musicPlaying') === 'true';
+            const lastTime = parseFloat(localStorage.getItem('musicTime') || '0');
+            
+            if (wasPlaying) {
+                music.currentTime = lastTime;
+                music.volume = 0.5;
+                music.play().then(() => {
+                    isMusicPlaying = true;
+                    musicIcon.src = '/static/pages/images/开声音.png';
+                    setInterval(() => {
+                        localStorage.setItem('musicTime', music.currentTime);
+                    }, 1000);
+                });
+            } else {
+                musicIcon.src = '/static/pages/images/关.png';
+                isMusicPlaying = false;
+            }
+        });
+
+        // 在页面卸载时保存音乐的当前时间
+        window.addEventListener('beforeunload', () => {
+            localStorage.setItem('musicTime', music.currentTime);
+        });
+    </script>
+
+    <footer>
+        <div>
+            <p>© 2023 在线游戏合集. 保留所有权利。</p>
+            <p>本网站仅供娱乐，不涉及任何商业用途。</p>
+            <div>
+                <a href="/feedback" id="feedbackLink" style="
+                    display: inline-block;
+                    padding: 8px 20px;
+                    background-color: rgba(74, 144, 226, 0.7);
+                    color: white;
+                    text-decoration: none;
+                    border-radius: 20px;
+                    font-size: 14px;
+                    transition: all 0.3s ease;
+                ">意见箱</a>
+            </div>
+        </div>
+    </footer>
+</body>
+</html> 

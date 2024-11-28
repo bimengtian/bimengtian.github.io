@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>查看反馈</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 20px;
+            background-color: #e6f3ff;
+            background-image: 
+                radial-gradient(circle at 50% 50%, rgba(255, 255, 255, 0.8) 0%, transparent 10%),
+                radial-gradient(circle at 25% 25%, rgba(255, 255, 255, 0.8) 0%, transparent 8%),
+                radial-gradient(circle at 75% 75%, rgba(255, 255, 255, 0.8) 0%, transparent 8%),
+                linear-gradient(45deg, #e6f3ff 25%, #f0f7ff 25%, #f0f7ff 50%, #e6f3ff 50%, #e6f3ff 75%, #f0f7ff 75%, #f0f7ff);
+            background-size: 
+                100px 100px,
+                80px 80px,
+                80px 80px,
+                40px 40px;
+            font-family: Arial, sans-serif;
+        }
+
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            background-color: rgba(255, 255, 255, 0.3);
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(255, 255, 255, 0.5);
+        }
+
+        h1 {
+            text-align: center;
+            color: #333;
+            margin-bottom: 30px;
+        }
+
+        .feedback-item {
+            background-color: rgba(255, 255, 255, 0.5);
+            padding: 15px;
+            margin-bottom: 15px;
+            border-radius: 8px;
+        }
+
+        .feedback-header {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 10px;
+            color: #666;
+            font-size: 14px;
+        }
+
+        .feedback-message {
+            color: #333;
+            white-space: pre-wrap;
+        }
+
+        .clear-button {
+            display: block;
+            margin: 20px auto;
+            padding: 10px 20px;
+            background-color: rgba(74, 144, 226, 0.7);
+            color: white;
+            border: none;
+            border-radius: 20px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .clear-button:hover {
+            background-color: rgba(74, 144, 226, 0.9);
+        }
+
+        .no-feedback {
+            text-align: center;
+            color: #666;
+            padding: 20px;
+        }
+
+        .back-button {
+            position: fixed;
+            top: 50px;
+            left: 50px;
+            background-color: rgba(255, 255, 255, 0.8);
+            padding: 10px 20px;
+            border-radius: 20px;
+            text-decoration: none;
+            color: #333;
+            font-size: 14px;
+            transition: all 0.3s ease;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+
+        .back-button:hover {
+            background-color: rgba(255, 255, 255, 0.9);
+            transform: scale(1.05);
+        }
+    </style>
+</head>
+<body>
+    <a href="/second-page" class="back-button">返回游戏页面</a>
+    <div class="container">
+        <h1>反馈内容</h1>
+        <div id="feedbackList"></div>
+        <button class="clear-button" onclick="clearFeedbacks()">清除所有反馈</button>
+    </div>
+
+    <script>
+        function loadFeedbacks() {
+            const feedbackList = document.getElementById('feedbackList');
+            const feedbacks = JSON.parse(localStorage.getItem('feedbacks') || '[]');
+            
+            if (feedbacks.length === 0) {
+                feedbackList.innerHTML = '<div class="no-feedback">暂无反馈内容</div>';
+                return;
+            }
+
+            feedbackList.innerHTML = feedbacks.reverse().map(feedback => `
+                <div class="feedback-item">
+                    <div class="feedback-header">
+                        <span>称呼：${feedback.name}</span>
+                        <span>邮箱：${feedback.email}</span>
+                        <span>时间：${feedback.time}</span>
+                    </div>
+                    <div class="feedback-message">${feedback.message}</div>
+                </div>
+            `).join('');
+        }
+
+        function clearFeedbacks() {
+            if (confirm('确定要清除所有反馈吗？此操作不可恢复。')) {
+                localStorage.removeItem('feedbacks');
+                loadFeedbacks();
+            }
+        }
+
+        // 页面加载时显示反馈
+        loadFeedbacks();
+    </script>
+</body>
+</html> 

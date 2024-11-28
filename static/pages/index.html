@@ -1,0 +1,204 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>在线游戏合集</title>
+    <style>
+        html, body {
+            margin: 0;
+            padding: 0;
+            width: 100%;
+            height: 100%;
+        }
+
+        body {
+            background-image: url('/static/pages/images/1.jpg');
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
+            background-attachment: fixed;
+            height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding-bottom: 0;
+            overflow: hidden;
+        }
+        
+        .clickable-image {
+            margin-top: 345px;
+            cursor: pointer;
+            max-width: 100%;
+            height: auto;
+            animation: startPulse 1.5s ease-in-out infinite;
+        }
+        
+        @keyframes startPulse {
+            0% {
+                transform: scale(1);
+            }
+            50% {
+                transform: scale(1.1);
+            }
+            100% {
+                transform: scale(1);
+            }
+        }
+
+        @media screen and (max-width: 768px) {
+            body {
+                background-size: 100% 100%;
+                align-items: flex-start;
+                padding: 0 20px;
+            }
+            
+            .clickable-image {
+                width: 80%;
+                max-width: 300px;
+                margin-top: 60vh;
+            }
+        }
+
+        @media screen and (max-width: 480px) {
+            .clickable-image {
+                margin-top: 50vh;
+            }
+        }
+
+        @media screen and (max-height: 480px) and (orientation: landscape) {
+            .clickable-image {
+                margin-top: 20vh;
+                max-width: 250px;
+            }
+        }
+
+        @media screen and (-webkit-min-device-pixel-ratio: 2), 
+               screen and (min-resolution: 192dpi) {
+            body {
+                background-attachment: scroll;
+            }
+        }
+
+        .music-control {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            width: 32px;
+            height: 32px;
+            background-color: rgba(255, 255, 255, 0.8);
+            border-radius: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            z-index: 1000;
+        }
+
+        .music-control:hover {
+            transform: scale(1.1);
+            background-color: rgba(255, 255, 255, 0.9);
+        }
+
+        .music-control img {
+            width: 20px;
+            height: 20px;
+        }
+
+        @media screen and (max-width: 768px) {
+            .music-control {
+                width: 32px;
+                height: 32px;
+                top: 15px;
+                right: 15px;
+            }
+
+            .music-control img {
+                width: 18px;
+                height: 18px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="music-control" onclick="toggleMusic()">
+        <img src="/static/pages/images/开声音.png" alt="音乐控制" id="musicIcon">
+    </div>
+
+    <audio id="bgMusic" loop>
+        <source src="/static/pages/music/background.mp3" type="audio/mpeg">
+    </audio>
+
+    <a href="/second-page">
+        <img src="/static/pages/images/start.jpg" alt="点击跳转" class="clickable-image">
+    </a>
+
+    <script>
+        const music = document.getElementById('bgMusic');
+        const musicIcon = document.getElementById('musicIcon');
+        let isMusicPlaying = false;
+
+        async function forceAutoplay() {
+            try {
+                music.volume = 0;
+                await music.play();
+                let vol = 0;
+                const fadeIn = setInterval(() => {
+                    if (vol < 0.5) {
+                        vol += 0.1;
+                        music.volume = vol;
+                    } else {
+                        clearInterval(fadeIn);
+                    }
+                }, 200);
+                
+                isMusicPlaying = true;
+                musicIcon.src = '/static/pages/images/开声音.png';
+                localStorage.setItem('musicPlaying', 'true');
+            } catch (error) {
+                console.log("自动播放失败:", error);
+                musicIcon.src = '/static/pages/images/关.png';
+                isMusicPlaying = false;
+                localStorage.setItem('musicPlaying', 'false');
+            }
+        }
+
+        function toggleMusic() {
+            if (isMusicPlaying) {
+                music.pause();
+                musicIcon.src = '/static/pages/images/关.png';
+                localStorage.setItem('musicPlaying', 'false');
+            } else {
+                music.volume = 0.5;
+                music.play().then(() => {
+                    musicIcon.src = '/static/pages/images/开声音.png';
+                    localStorage.setItem('musicPlaying', 'true');
+                }).catch(error => {
+                    console.log("播放失败:", error);
+                });
+            }
+            isMusicPlaying = !isMusicPlaying;
+        }
+
+        // 页面加载时检查之前的音乐状态
+        document.addEventListener('DOMContentLoaded', () => {
+            const wasPlaying = localStorage.getItem('musicPlaying') === 'true';
+            const lastTime = parseFloat(localStorage.getItem('musicTime') || '0');
+            
+            if (wasPlaying) {
+                music.currentTime = lastTime;
+                forceAutoplay();
+            } else {
+                forceAutoplay();
+            }
+        });
+        
+        // 用户交互时也尝试播放
+        document.addEventListener('click', function() {
+            if (!isMusicPlaying) {
+                forceAutoplay();
+            }
+        }, { once: true });
+    </script>
+</body>
+</html> 

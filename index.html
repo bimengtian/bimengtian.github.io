@@ -1,0 +1,397 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>WELCOME - 登录</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <style>
+        body {
+            margin: 0;
+            padding: 20px;
+            background-color: #e6f3ff;
+            background-image: 
+                radial-gradient(circle at 50% 50%, rgba(255, 255, 255, 0.8) 0%, transparent 10%),
+                radial-gradient(circle at 25% 25%, rgba(255, 255, 255, 0.8) 0%, transparent 8%),
+                radial-gradient(circle at 75% 75%, rgba(255, 255, 255, 0.8) 0%, transparent 8%),
+                linear-gradient(45deg, #e6f3ff 25%, #f0f7ff 25%, #f0f7ff 50%, #e6f3ff 50%, #e6f3ff 75%, #f0f7ff 75%, #f0f7ff);
+            background-size: 
+                100px 100px,
+                80px 80px,
+                80px 80px,
+                40px 40px;
+            font-family: Arial, sans-serif;
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .login-container {
+            background-color: rgba(255, 255, 255, 0.3);
+            padding: 40px;
+            border-radius: 20px;
+            box-shadow: 0 0 20px rgba(255, 255, 255, 0.5);
+            width: 320px;
+            transform: translateY(0);
+            transition: all 0.3s ease;
+            backdrop-filter: blur(8px);
+            -webkit-backdrop-filter: blur(8px);
+        }
+
+        .login-container:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 12px 40px 0 rgba(31, 38, 135, 0.45);
+        }
+
+        .login-title {
+            text-align: center;
+            margin-bottom: 40px;
+        }
+
+        .login-title h1 {
+            color: #333;
+            font-size: 42px;
+            margin: 0;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.1);
+            letter-spacing: 2px;
+            font-weight: bold;
+        }
+
+        .form-group {
+            margin-bottom: 25px;
+            position: relative;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            color: #333;
+            font-size: 14px;
+            letter-spacing: 1px;
+            font-weight: bold;
+        }
+
+        .form-group input {
+            width: 100%;
+            padding: 12px 15px;
+            border: 2px solid rgba(255, 255, 255, 0.5);
+            border-radius: 25px;
+            background: rgba(255, 255, 255, 0.9);
+            color: #333;
+            font-size: 16px;
+            transition: all 0.3s ease;
+            box-sizing: border-box;
+        }
+
+        .form-group input:focus {
+            outline: none;
+            background: white;
+            border-color: #40a9ff;
+            box-shadow: 0 0 15px rgba(24, 144, 255, 0.2);
+        }
+
+        .login-button {
+            width: 100%;
+            padding: 15px;
+            border: none;
+            border-radius: 25px;
+            background: linear-gradient(45deg, #1890ff, #40a9ff);
+            color: white;
+            font-size: 16px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-top: 20px;
+            box-shadow: 0 4px 6px rgba(24, 144, 255, 0.2);
+        }
+
+        .login-button:hover {
+            background: linear-gradient(45deg, #40a9ff, #1890ff);
+            transform: translateY(-2px);
+            box-shadow: 0 6px 8px rgba(24, 144, 255, 0.3);
+        }
+
+        .login-button:active {
+            transform: translateY(0);
+        }
+
+        @media (max-width: 480px) {
+            .login-container {
+                width: 90%;
+                margin: 0 20px;
+                padding: 30px;
+            }
+            
+            .login-title h1 {
+                font-size: 36px;
+            }
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .login-container {
+            animation: fadeInUp 0.6s ease-out;
+        }
+
+        .form-group input::placeholder {
+            color: #999;
+            transition: all 0.3s ease;
+        }
+
+        .form-group input:focus::placeholder {
+            opacity: 0.7;
+            transform: translateX(10px);
+        }
+
+        .password-wrapper {
+            position: relative;
+        }
+
+        .password-toggle {
+            position: absolute;
+            right: 15px;
+            top: 50%;
+            transform: translateY(-50%);
+            cursor: pointer;
+            width: 20px;
+            height: 20px;
+            background: none;
+            border: none;
+            padding: 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .password-toggle img {
+            width: 20px;
+            height: 20px;
+            opacity: 0.6;
+            transition: opacity 0.3s ease;
+        }
+
+        .password-toggle:hover img {
+            opacity: 1;
+        }
+
+        #password {
+            padding-right: 45px;
+        }
+
+        .form-container {
+            display: none;
+        }
+
+        .form-container.active {
+            display: block;
+        }
+
+        .toggle-forms {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        .toggle-button {
+            background: none;
+            border: none;
+            color: #1890ff;
+            cursor: pointer;
+            font-size: 14px;
+            margin: 0 10px;
+            padding: 5px 10px;
+            border-radius: 15px;
+            transition: all 0.3s ease;
+        }
+
+        .toggle-button.active {
+            background: #1890ff;
+            color: white;
+        }
+
+        .form-message {
+            text-align: center;
+            color: #ff4d4f;
+            margin-top: 10px;
+            font-size: 14px;
+            min-height: 20px;
+        }
+    </style>
+</head>
+<body>
+    <div class="login-container">
+        <div class="login-title">
+            <h1>WELCOME</h1>
+        </div>
+
+        <div class="toggle-forms">
+            <button type="button" class="toggle-button active" onclick="toggleForm('login')">登录</button>
+            <button type="button" class="toggle-button" onclick="toggleForm('register')">注册</button>
+        </div>
+
+        <div id="loginForm" class="form-container active">
+            <form method="POST" action="/login">
+                <div class="form-group">
+                    <label for="login-username">用户名</label>
+                    <input 
+                        type="text" 
+                        id="login-username" 
+                        name="username" 
+                        required 
+                        placeholder="请输入用户名"
+                        autocomplete="off">
+                </div>
+                <div class="form-group">
+                    <label for="login-password">密码</label>
+                    <div class="password-wrapper">
+                        <input 
+                            type="password" 
+                            id="login-password" 
+                            name="password" 
+                            required 
+                            placeholder="请输入密码">
+                        <button 
+                            type="button" 
+                            class="password-toggle" 
+                            onclick="togglePasswordVisibility('login-password')">
+                            <span class="password-toggle-icon" style="font-size: 16px; color: #666;">👁️</span>
+                        </button>
+                    </div>
+                </div>
+                <div class="form-message" id="loginMessage"></div>
+                <button type="submit" class="login-button">登录</button>
+            </form>
+        </div>
+
+        <div id="registerForm" class="form-container">
+            <form method="POST" action="/register">
+                <div class="form-group">
+                    <label for="register-username">用户名</label>
+                    <input 
+                        type="text" 
+                        id="register-username" 
+                        name="username" 
+                        required 
+                        placeholder="请输入用户名"
+                        autocomplete="off">
+                </div>
+                <div class="form-group">
+                    <label for="register-password">密码</label>
+                    <div class="password-wrapper">
+                        <input 
+                            type="password" 
+                            id="register-password" 
+                            name="password" 
+                            required 
+                            placeholder="请输入密码">
+                        <button 
+                            type="button" 
+                            class="password-toggle" 
+                            onclick="togglePasswordVisibility('register-password')">
+                            <span class="password-toggle-icon" style="font-size: 16px; color: #666;">👁️</span>
+                        </button>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="register-confirm-password">确认密码</label>
+                    <div class="password-wrapper">
+                        <input 
+                            type="password" 
+                            id="register-confirm-password" 
+                            name="confirm_password" 
+                            required 
+                            placeholder="请再次输入密码">
+                        <button 
+                            type="button" 
+                            class="password-toggle" 
+                            onclick="togglePasswordVisibility('register-confirm-password')">
+                            <span class="password-toggle-icon" style="font-size: 16px; color: #666;">👁️</span>
+                        </button>
+                    </div>
+                </div>
+                <div class="form-message" id="registerMessage"></div>
+                <button type="submit" class="login-button">注册</button>
+            </form>
+        </div>
+    </div>
+
+    <script>
+        function toggleForm(formType) {
+            const loginForm = document.getElementById('loginForm');
+            const registerForm = document.getElementById('registerForm');
+            const buttons = document.querySelectorAll('.toggle-button');
+            
+            buttons.forEach(button => button.classList.remove('active'));
+            
+            if (formType === 'login') {
+                loginForm.classList.add('active');
+                registerForm.classList.remove('active');
+                buttons[0].classList.add('active');
+            } else {
+                loginForm.classList.remove('active');
+                registerForm.classList.add('active');
+                buttons[1].classList.add('active');
+            }
+        }
+
+        function togglePasswordVisibility(inputId) {
+            const passwordInput = document.getElementById(inputId);
+            const toggleIcon = passwordInput.parentElement.querySelector('.password-toggle-icon');
+            
+            if (passwordInput.type === 'password') {
+                passwordInput.type = 'text';
+                toggleIcon.style.opacity = '1';
+            } else {
+                passwordInput.type = 'password';
+                toggleIcon.style.opacity = '0.6';
+            }
+        }
+
+        // 处理表单提交
+        document.querySelectorAll('form').forEach(form => {
+            form.addEventListener('submit', async (e) => {
+                e.preventDefault();
+                const formData = new FormData(form);
+                const action = form.getAttribute('action');
+                
+                const data = Object.fromEntries(formData);
+                
+                try {
+                    const response = await fetch(action, {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                        },
+                        body: JSON.stringify(data),
+                    });
+                    
+                    const result = await response.json();
+                    const messageElement = form.querySelector('.form-message');
+                    
+                    if (response.ok) {
+                        window.location.href = result.redirect;  // 使用后端返回的重定向URL
+                    } else {
+                        messageElement.style.color = '#ff4d4f';
+                        messageElement.textContent = result.message || '操作失败，请重试';
+                    }
+                } catch (error) {
+                    console.error('网络错误:', error);
+                    const messageElement = form.querySelector('.form-message');
+                    messageElement.style.color = '#ff4d4f';
+                    messageElement.textContent = '网络错误，请重试';
+                }
+            });
+        });
+    </script>
+</body>
+</html> 
